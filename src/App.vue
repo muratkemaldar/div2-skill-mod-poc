@@ -303,21 +303,30 @@ export default {
 
 <style lang="scss">
 .app {
-  padding: 25px;
+  --padding: 15px;
+  padding: var(--padding);
   font-family: Helvetica, Segoe UI, sans-serif;
   line-height: 1.3;
   font-size: 15px;
+
+  @media screen and (min-width: 640px) {
+    --padding: 25px;
+  }
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-gap: 25px;
+  grid-template-columns: 1fr;
+  grid-gap: var(--padding);
+
+  @media screen and (min-width: 640px) {
+    grid-template-columns: 1fr 2fr;
+  }
 }
 
 .block {
   &:not(:last-child) {
-    margin-bottom: 25px;
+    margin-bottom: var(--padding);
   }
 }
 
@@ -331,7 +340,7 @@ a {
 }
 
 .box {
-  padding: 25px;
+  padding: var(--padding);
   display: block;
   border: 1px solid black;
 }
@@ -401,7 +410,7 @@ ul {
 
   li {
     &:not(:last-child) {
-      margin-bottom: 25px;
+      margin-bottom: var(--padding);
     }
   }
 }
