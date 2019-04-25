@@ -4,7 +4,7 @@
       The Division 2 - Skill Mod Proof of Concept
     </h1>
     <p class="block">
-      <a href="https:/twitter.com/murimuffin5">by @murimuffin5</a>
+      <a href="https://twitter.com/murimuffin5">by @murimuffin5</a>
     </p>
     <div class="player block box">
       <h2>Player Skill Power: {{ player.skillPower }}</h2>
