@@ -39,21 +39,17 @@
       <div class="skill-desc block">
         <h2>Skill: {{ skill.name }}</h2>
         <div>
-          <div
-            :style="{ color: totalDamage > skill.damage ? 'green' : 'black' }"
-          >
+          <div :class="[totalDamage > skill.damage && 'bonus']">
             <strong>
               Total Damage: {{ totalDamage.toFixed(2) }} / second
             </strong>
           </div>
 
-          <div :style="{ color: totalAmmo > skill.ammo ? 'green' : 'black' }">
+          <div :class="[totalAmmo > skill.ammo && 'bonus']">
             <strong> Total Ammo: {{ totalAmmo.toFixed(2) }} </strong>
           </div>
 
-          <div
-            :style="{ color: totalRadius > skill.radius ? 'green' : 'black' }"
-          >
+          <div :class="[totalRadius > skill.radius && 'bonus']">
             <strong> Total Radius: {{ totalRadius.toFixed(2) }} m </strong>
           </div>
         </div>
@@ -84,13 +80,7 @@
                 <div class="bonus" v-if="slot.equipped">
                   <strong>
                     +
-                    {{
-                      getTotalModBonus(
-                        getMod(slot.equipped).id,
-                        player.skillPower
-                      ).toFixed(2)
-                    }}
-                    {{ getMod(slot.equipped).type === "multiply" ? "%" : "" }}
+                    {{ getTotalModBonus(getMod(slot.equipped).id).toFixed(2) }}
                     {{ getMod(slot.equipped).suffix }}
                   </strong>
                 </div>
@@ -121,14 +111,9 @@
                 <p>
                   <strong>{{ mod.name }}</strong>
                 </p>
-                <div>
-                  + {{ mod.baseValue }}
-                  {{ mod.type === "multiply" ? "%" : "" }}
-                  {{ mod.suffix }} (Base Value)
-                </div>
+                <div>+ {{ mod.baseValue }} {{ mod.suffix }} (Base Value)</div>
                 <div class="bonus">
                   + {{ mod.scale(player.skillPower).toFixed(2) }}
-                  {{ mod.type === "multiply" ? "%" : "" }}
                   {{ mod.suffix }} ({{ mod.scale(100).toFixed(2) }} for every
                   100 Skill Power)
                 </div>
@@ -136,8 +121,8 @@
                 <div class="bonus">
                   <strong>
                     +
-                    {{ getTotalModBonus(mod.id, player.skillPower).toFixed(2) }}
-                    {{ mod.type === "multiply" ? "%" : "" }} {{ mod.suffix }}
+                    {{ getTotalModBonus(mod.id).toFixed(2) }}
+                    {{ mod.suffix }}
                   </strong>
                 </div>
               </a>
@@ -156,10 +141,10 @@ export default {
     getMod(id) {
       return this.mods.find(mod => mod.id === id);
     },
-    getTotalModBonus(modId, skillPower) {
+    getTotalModBonus(modId) {
       const mod = this.mods.find(mod => mod.id === modId);
       if (mod) {
-        return mod.baseValue + mod.scale(skillPower);
+        return mod.baseValue + mod.scale(this.player.skillPower);
       }
     },
     getEquippedModsForAttribute(attribute) {
@@ -236,7 +221,7 @@ export default {
           id: "mod-a",
           attribute: "damage",
           name: "Damage Mod (High Scaling / Low Base)",
-          suffix: "Damage",
+          suffix: "% Damage",
           type: "multiply",
           baseValue: 5,
           scale: skillPower => {
@@ -247,8 +232,7 @@ export default {
           id: "mod-a2",
           attribute: "damage",
           name: "Damage Mod (Low Scaling / High Base)",
-          suffix: "Damage",
-          type: "multiply",
+          suffix: "% Damage",
           baseValue: 10,
           scale: skillPower => {
             return skillPower / 300;
@@ -258,7 +242,6 @@ export default {
           id: "mod-b",
           attribute: "ammo",
           name: "Ammo Mod",
-          type: "add",
           suffix: "Ammo",
           baseValue: 3,
           scale: skillPower => {
@@ -269,8 +252,7 @@ export default {
           id: "mod-c",
           attribute: "radius",
           name: "Radius Mod",
-          suffix: "Radius",
-          type: "multiply",
+          suffix: "% Radius",
           baseValue: 10,
           scale: skillPower => {
             return skillPower / 50;
