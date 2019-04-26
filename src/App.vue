@@ -326,6 +326,10 @@ a {
     padding: 0 0.75em;
     font-size: 0.875em;
   }
+
+  &:hover {
+    border-color: #f28c18;
+  }
 }
 
 .mobile-only {
@@ -358,15 +362,12 @@ button {
   cursor: pointer;
   line-height: 0;
   background: none;
-  border: 1px solid blue;
-  color: blue;
+  border: 1px solid #f28c18;
+  color: #f28c18;
   font: inherit;
   margin-right: 10px;
   margin-bottom: 10px;
 
-  &:hover {
-    background: #eee;
-  }
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -374,8 +375,8 @@ button {
 }
 
 .active {
-  outline: 2px solid blue;
-  border: 1px solid blue;
+  outline: 2px solid #f28c18;
+  border: 1px solid #f28c18;
 }
 
 hr {
