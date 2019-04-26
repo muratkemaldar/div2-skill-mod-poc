@@ -6,7 +6,7 @@
     <p class="block">
       <a href="https://twitter.com/murimuffin5">by @murimuffin5</a>
     </p>
-    <div class="player block box">
+    <div class="player block">
       <h2>Player Skill Power: {{ player.skillPower }}</h2>
       <div class="btn-group">
         <button
@@ -35,7 +35,7 @@
         </button>
       </div>
     </div>
-    <div class="skills box block">
+    <div class="skills block">
       <div class="skill-desc block">
         <h2>Skill: {{ skill.name }}</h2>
         <div>
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="grid">
-        <div class="slots ">
+        <div class="slots">
           <ul>
             <li v-for="slot in skill.slots" :key="slot.id">
               <a
@@ -66,17 +66,15 @@
                 role="button"
                 @click="setActiveSlot(slot.id)"
               >
-                <p>
-                  <strong
-                    >{{ slot.name }}
-                    <span v-if="slot.equipped">
-                      - {{ getMod(slot.equipped).name }}
-                    </span>
-                    <span v-else>
-                      - Nothing equipped
-                    </span></strong
-                  >
-                </p>
+                <strong class="box-label">{{ slot.name }}</strong>
+                <div>
+                  <span v-if="slot.equipped">
+                    {{ getMod(slot.equipped).name }}
+                  </span>
+                  <i class="muted" v-else>
+                    Nothing equipped
+                  </i>
+                </div>
                 <div class="bonus" v-if="slot.equipped">
                   <strong>
                     +
@@ -88,14 +86,8 @@
             </li>
           </ul>
         </div>
-        <div v-if="activeSlot" class="slot-options box">
-          <p>
-            <strong>{{ activeSlot.name }}</strong>
-          </p>
-
-          <p class="block">
-            <strong>Your mods</strong>
-          </p>
+        <div v-if="activeSlot" class="slot-options">
+          <hr style="margin: 0 0 30px;" class="mobile-only" />
           <ul class="mods">
             <li class="block" v-for="mod in mods" :key="mod.id">
               <a
@@ -108,9 +100,7 @@
                 role="button"
                 @click="setSlotMod(activeSlot.id, mod.id)"
               >
-                <p>
-                  <strong>{{ mod.name }}</strong>
-                </p>
+                <strong class="box-label">{{ mod.name }}</strong>
                 <div>+ {{ mod.baseValue }} {{ mod.suffix }} (Base Value)</div>
                 <div class="bonus">
                   + {{ mod.scale(player.skillPower).toFixed(2) }}
@@ -220,7 +210,7 @@ export default {
         {
           id: "mod-a",
           attribute: "damage",
-          name: "Damage Mod (High Scaling / Low Base)",
+          name: "Mod: Damage (High Scaling / Low Base)",
           suffix: "% Damage",
           type: "multiply",
           baseValue: 5,
@@ -231,7 +221,7 @@ export default {
         {
           id: "mod-a2",
           attribute: "damage",
-          name: "Damage Mod (Low Scaling / High Base)",
+          name: "Mod: Damage (Low Scaling / High Base)",
           suffix: "% Damage",
           baseValue: 10,
           scale: skillPower => {
@@ -241,7 +231,7 @@ export default {
         {
           id: "mod-b",
           attribute: "ammo",
-          name: "Ammo Mod",
+          name: "Mod: Ammo",
           suffix: "Ammo",
           baseValue: 3,
           scale: skillPower => {
@@ -251,7 +241,7 @@ export default {
         {
           id: "mod-c",
           attribute: "radius",
-          name: "Radius Mod",
+          name: "Mod: Radius",
           suffix: "% Radius",
           baseValue: 10,
           scale: skillPower => {
@@ -285,14 +275,14 @@ export default {
 
 <style lang="scss">
 .app {
-  --padding: 15px;
+  --padding: 1.25em;
   padding: var(--padding);
   font-family: Helvetica, Segoe UI, sans-serif;
   line-height: 1.3;
   font-size: 15px;
 
   @media screen and (min-width: 640px) {
-    --padding: 25px;
+    --padding: 1.5em;
   }
 }
 
@@ -308,23 +298,40 @@ export default {
 
 .block {
   &:not(:last-child) {
-    margin-bottom: var(--padding);
+    margin-bottom: calc(var(--padding) + 5px);
   }
+}
+
+.muted {
+  opacity: 0.5;
 }
 
 a {
   cursor: pointer;
   text-decoration: none;
-
-  &:hover {
-    background: #eee;
-  }
 }
 
 .box {
   padding: var(--padding);
   display: block;
   border: 1px solid black;
+  position: relative;
+
+  &-label {
+    position: absolute;
+    top: 0;
+    background: white;
+    display: inline-block;
+    transform: translate(-0.75em, -50%);
+    padding: 0 0.75em;
+    font-size: 0.875em;
+  }
+}
+
+.mobile-only {
+  @media screen and (min-width: 640px) {
+    display: none;
+  }
 }
 
 h1,
@@ -333,6 +340,7 @@ h3,
 h4,
 h5,
 h6 {
+  margin-bottom: 0.45em;
   &:first-child {
     margin-top: 0;
   }
@@ -354,6 +362,8 @@ button {
   color: blue;
   font: inherit;
   margin-right: 10px;
+  margin-bottom: 10px;
+
   &:hover {
     background: #eee;
   }
@@ -364,7 +374,7 @@ button {
 }
 
 .active {
-  outline: 1px solid blue;
+  outline: 2px solid blue;
   border: 1px solid blue;
 }
 
@@ -392,7 +402,7 @@ ul {
 
   li {
     &:not(:last-child) {
-      margin-bottom: var(--padding);
+      margin-bottom: calc(var(--padding) + 5px);
     }
   }
 }
